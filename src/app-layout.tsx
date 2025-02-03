@@ -1,12 +1,12 @@
-import { ReactNode, Suspense } from 'react';
-import { NavLink as Link } from 'react-router-dom';
-import { AppShell, Burger, Group, Loader, NavLink, Text } from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { ClusterUiChecker } from '@/features/cluster/ui';
+import { ReactNode, Suspense } from 'react'
+import { NavLink as Link } from 'react-router-dom'
+import { AppShell, Burger, Group, Loader, NavLink, Text } from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import { ClusterUiChecker } from '@/features/cluster/ui'
 
 export interface AppLayoutLink {
-  label: string;
-  to: string;
+  label: string
+  to: string
 }
 
 export function AppLayout({
@@ -14,11 +14,11 @@ export function AppLayout({
   links,
   profile,
 }: {
-  children: ReactNode;
-  links: AppLayoutLink[];
-  profile: ReactNode;
+  children: ReactNode
+  links: AppLayoutLink[]
+  profile: ReactNode
 }) {
-  const [opened, { toggle, close }] = useDisclosure();
+  const [opened, { toggle, close }] = useDisclosure()
   return (
     <AppShell
       header={{ height: 60 }}
@@ -34,7 +34,7 @@ export function AppLayout({
           <Group justify="center" align="center" wrap="nowrap">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
             <Text component={Link} to="/" size="xl" fw={700}>
-              Dicceprototype
+              DICCE
             </Text>
           </Group>
           <Group justify="center" align="center">
@@ -51,7 +51,7 @@ export function AppLayout({
             to={link.to}
             label={link.label}
             onClick={() => {
-              close();
+              close()
             }}
           />
         ))}
@@ -66,5 +66,5 @@ export function AppLayout({
         </Suspense>
       </AppShell.Main>
     </AppShell>
-  );
+  )
 }

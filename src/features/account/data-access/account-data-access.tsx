@@ -1,5 +1,5 @@
-import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token';
-import { useConnection, useWallet } from '@solana/wallet-adapter-react';
+import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
+import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import {
   Connection,
   LAMPORTS_PER_SOL,
@@ -8,16 +8,16 @@ import {
   TransactionMessage,
   TransactionSignature,
   VersionedTransaction,
-} from '@solana/web3.js';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { Anchor } from '@mantine/core';
-import { NotificationData } from '@mantine/notifications';
-import { useCluster } from '@/features/cluster/data-access/cluster-provider';
-import { toastError, toastSuccess } from '@/ui/ui-toast';
+} from '@solana/web3.js'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { Anchor } from '@mantine/core'
+import { NotificationData } from '@mantine/notifications'
+import { useCluster } from '@/features/cluster/data-access/cluster-provider'
+import { toastError, toastSuccess } from '@/ui/ui-toast'
 
 export function useQueries({ address }: { address: PublicKey }) {
-  const { connection } = useConnection();
-  const wallet = useWallet();
+  const { connection } = useConnection()
+  const wallet = useWallet()
 
   return {
     getBalance: {
@@ -49,74 +49,71 @@ export function useQueries({ address }: { address: PublicKey }) {
             connection,
             destination,
             publicKey: address,
-          });
+          })
 
           // Send transaction and await for signature
-          const signature: TransactionSignature = await wallet.sendTransaction(
-            transaction,
-            connection
-          );
+          const signature: TransactionSignature = await wallet.sendTransaction(transaction, connection)
 
           // Send transaction and await for signature
-          await connection.confirmTransaction({ signature, ...latestBlockhash }, 'confirmed');
+          await connection.confirmTransaction({ signature, ...latestBlockhash }, 'confirmed')
 
-          return signature;
+          return signature
         } catch (error: unknown) {
-          console.log('error', `Transaction failed! ${error}`);
+          console.log('error', `Transaction failed! ${error}`)
         }
       },
     },
-  };
+  }
 }
 
 export function useGetBalance({ address }: { address: PublicKey }) {
-  return useQuery(useQueries({ address }).getBalance);
+  return useQuery(useQueries({ address }).getBalance)
 }
 
 export function useGetSignatures({ address }: { address: PublicKey }) {
-  return useQuery(useQueries({ address }).getSignatures);
+  return useQuery(useQueries({ address }).getSignatures)
 }
 
 export function useGetTokenAccounts({ address }: { address: PublicKey }) {
-  return useQuery(useQueries({ address }).getTokenAccounts);
+  return useQuery(useQueries({ address }).getTokenAccounts)
 }
 
 export function useGetTokenBalance({ address }: { address: PublicKey }) {
-  return useQuery(useQueries({ address }).getTokenBalance);
+  return useQuery(useQueries({ address }).getTokenBalance)
 }
 
 export function useRequestAirdrop({ address }: { address: PublicKey }) {
   const {
     requestAirdrop: { mutationKey, mutationFn },
-  } = useQueries({ address });
-  const onSuccess = useOnTransactionSuccess({ address });
+  } = useQueries({ address })
+  const onSuccess = useOnTransactionSuccess({ address })
   return useMutation({
     mutationKey,
     mutationFn,
     onSuccess,
     onError: (error: unknown) => {
-      toastError(`Requesting airdrop failed! ${error}`);
+      toastError(`Requesting airdrop failed! ${error}`)
     },
-  });
+  })
 }
 
 export function useTransferSol({ address }: { address: PublicKey }) {
-  const onSuccess = useOnTransactionSuccess({ address });
+  const onSuccess = useOnTransactionSuccess({ address })
   return useMutation({
     ...useQueries({ address }).transferSol,
     onSuccess,
     onError: (error: unknown) => {
-      toastError(`Sending transaction failed! ${error}`);
+      toastError(`Sending transaction failed! ${error}`)
     },
-  });
+  })
 }
 
 async function getAllTokenAccounts(connection: Connection, address: PublicKey) {
   const [tokenAccounts, token2022Accounts] = await Promise.all([
     connection.getParsedTokenAccountsByOwner(address, { programId: TOKEN_PROGRAM_ID }),
     connection.getParsedTokenAccountsByOwner(address, { programId: TOKEN_2022_PROGRAM_ID }),
-  ]);
-  return [...tokenAccounts.value, ...token2022Accounts.value];
+  ])
+  return [...tokenAccounts.value, ...token2022Accounts.value]
 }
 
 async function requestAndConfirmAirdrop({
@@ -124,33 +121,33 @@ async function requestAndConfirmAirdrop({
   amount,
   connection,
 }: {
-  connection: Connection;
-  address: PublicKey;
-  amount: string;
+  connection: Connection
+  address: PublicKey
+  amount: string
 }) {
   const [latestBlockhash, signature] = await Promise.all([
     connection.getLatestBlockhash(),
     connection.requestAirdrop(address, parseFloat(amount) * LAMPORTS_PER_SOL),
-  ]);
+  ])
 
-  await connection.confirmTransaction({ signature, ...latestBlockhash }, 'confirmed');
-  return signature;
+  await connection.confirmTransaction({ signature, ...latestBlockhash }, 'confirmed')
+  return signature
 }
 
 function useOnTransactionSuccess({ address }: { address: PublicKey }) {
-  const { getExplorerUrl } = useCluster();
-  const client = useQueryClient();
-  const { getBalance, getSignatures } = useQueries({ address });
+  const { getExplorerUrl } = useCluster()
+  const client = useQueryClient()
+  const { getBalance, getSignatures } = useQueries({ address })
 
   return (signature?: TransactionSignature) => {
     if (signature) {
-      uiToastLink({ link: getExplorerUrl(`tx/${signature}`), label: 'View Transaction' });
+      uiToastLink({ link: getExplorerUrl(`tx/${signature}`), label: 'View Transaction' })
     }
     return Promise.all([
       client.invalidateQueries({ queryKey: getBalance.queryKey }),
       client.invalidateQueries({ queryKey: getSignatures.queryKey }),
-    ]);
-  };
+    ])
+  }
 }
 
 export function uiToastLink({
@@ -165,7 +162,7 @@ export function uiToastLink({
         {label}
       </Anchor>
     ),
-  });
+  })
 }
 
 export async function createTransaction({
@@ -174,16 +171,16 @@ export async function createTransaction({
   amount,
   connection,
 }: {
-  publicKey: PublicKey;
-  destination: PublicKey;
-  amount: string;
-  connection: Connection;
+  publicKey: PublicKey
+  destination: PublicKey
+  amount: string
+  connection: Connection
 }): Promise<{
-  transaction: VersionedTransaction;
-  latestBlockhash: { blockhash: string; lastValidBlockHeight: number };
+  transaction: VersionedTransaction
+  latestBlockhash: { blockhash: string; lastValidBlockHeight: number }
 }> {
   // Get the latest blockhash to use in our transaction
-  const latestBlockhash = await connection.getLatestBlockhash();
+  const latestBlockhash = await connection.getLatestBlockhash()
 
   // Create instructions to send, in this case a simple transfer
   const instructions = [
@@ -192,20 +189,20 @@ export async function createTransaction({
       toPubkey: destination,
       lamports: parseFloat(amount) * LAMPORTS_PER_SOL,
     }),
-  ];
+  ]
 
   // Create a new TransactionMessage with version and compile it to legacy
   const messageLegacy = new TransactionMessage({
     payerKey: publicKey,
     recentBlockhash: latestBlockhash.blockhash,
     instructions,
-  }).compileToLegacyMessage();
+  }).compileToLegacyMessage()
 
   // Create a new VersionedTransaction which supports legacy and v0
-  const transaction = new VersionedTransaction(messageLegacy);
+  const transaction = new VersionedTransaction(messageLegacy)
 
   return {
     transaction,
     latestBlockhash,
-  };
+  }
 }

@@ -1,5 +1,5 @@
-import { useWallet } from '@solana/wallet-adapter-react'
 import React, { ReactNode, useMemo } from 'react'
+import { useWallet } from '@solana/wallet-adapter-react'
 import { getUmi, Umi } from './get-umi'
 
 export interface UmiProviderContext {

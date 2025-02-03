@@ -1,8 +1,8 @@
-import { CollectionV1 } from '@metaplex-foundation/mpl-core';
-import { publicKey, PublicKey } from '@metaplex-foundation/umi';
-import { useParams } from 'react-router-dom';
-import { Alert, Container, Loader, SimpleGrid } from '@mantine/core';
-import { CollectionUiMint } from '@/features/collection/ui/collection-ui-mint';
+import { CollectionV1 } from '@metaplex-foundation/mpl-core'
+import { publicKey, PublicKey } from '@metaplex-foundation/umi'
+import { useParams } from 'react-router-dom'
+import { Alert, Container, Loader, SimpleGrid } from '@mantine/core'
+import { CollectionUiMint } from '@/features/collection/ui/collection-ui-mint'
 import {
   collectionConfigs,
   useFetchCandyGuard,
@@ -10,21 +10,21 @@ import {
   useGetAsset,
   useGetCollection,
   useMintAsset,
-} from './data-access';
-import { CollectionUiCard } from './ui/collection-ui-card';
+} from './data-access'
+import { CollectionUiCard } from './ui/collection-ui-card'
 
 export default function CollectionDetailFeature() {
-  const { collection } = useParams() as { collection: string };
-  const query = useGetCollection({ collection });
+  const { collection } = useParams() as { collection: string }
+  const query = useGetCollection({ collection })
 
-  const found = collectionConfigs.find(({ collectionMint }) => collectionMint === collection);
+  const found = collectionConfigs.find(({ collectionMint }) => collectionMint === collection)
 
   if (!found) {
     return (
       <Alert color="red" title="Error">
         Collection not found
       </Alert>
-    );
+    )
   }
 
   return (
@@ -43,7 +43,7 @@ export default function CollectionDetailFeature() {
         </Alert>
       )}
     </Container>
-  );
+  )
 }
 
 function CollectionDetail({
@@ -51,16 +51,16 @@ function CollectionDetail({
   candyGuard,
   collection,
 }: {
-  candyMachine: PublicKey;
-  candyGuard: PublicKey;
-  collection: CollectionV1;
+  candyMachine: PublicKey
+  candyGuard: PublicKey
+  collection: CollectionV1
 }) {
-  const query = useGetAsset(collection);
-  const mutation = useMintAsset({ collection });
-  const candyMachineQuery = useFetchCandyMachine(candyMachine);
-  const candyGuardQuery = useFetchCandyGuard(candyGuard);
+  const query = useGetAsset(collection)
+  const mutation = useMintAsset({ collection })
+  const candyMachineQuery = useFetchCandyMachine(candyMachine)
+  const candyGuardQuery = useFetchCandyGuard(candyGuard)
 
-  const isLoading = query.isPending || candyMachineQuery.isPending || candyGuardQuery.isPending;
+  const isLoading = query.isPending || candyMachineQuery.isPending || candyGuardQuery.isPending
 
   return isLoading ? (
     <Loader />
@@ -72,13 +72,11 @@ function CollectionDetail({
           candyMachine={candyMachineQuery.data}
           candyGuard={candyGuardQuery.data}
           loading={mutation.isPending}
-          mint={(guard) =>
-            mutation.mutateAsync({ cm: candyMachineQuery.data, cg: candyGuardQuery.data, guard })
-          }
+          mint={(guard) => mutation.mutateAsync({ cm: candyMachineQuery.data, cg: candyGuardQuery.data, guard })}
         />
       ) : null}
     </SimpleGrid>
   ) : (
     <Alert color="red">Error loading Asset</Alert>
-  );
+  )
 }

@@ -1,10 +1,10 @@
-import { LucideWifiHigh, LucideWifiOff } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { Button, Menu } from '@mantine/core';
-import { useCluster } from '@/features/cluster/data-access/cluster-provider';
+import { LucideWifiHigh, LucideWifiOff } from 'lucide-react'
+import { Link } from 'react-router-dom'
+import { Button, Menu } from '@mantine/core'
+import { useCluster } from '@/features/cluster/data-access/cluster-provider'
 
 export function ClusterUiSelect() {
-  const { clusters, setCluster, cluster } = useCluster();
+  const { clusters, setCluster, cluster } = useCluster()
   return (
     <Menu shadow="md" width={200}>
       <Menu.Target>
@@ -27,5 +27,5 @@ export function ClusterUiSelect() {
         </Menu.Item>
       </Menu.Dropdown>
     </Menu>
-  );
+  )
 }

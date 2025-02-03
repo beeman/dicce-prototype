@@ -1,11 +1,11 @@
-import { CollectionV1 } from '@metaplex-foundation/mpl-core';
-import { Skeleton, Text } from '@mantine/core';
-import { useGetAsset } from '@/features/collection/data-access';
-import { CollectionUiCard } from '@/features/collection/ui/collection-ui-card';
+import { CollectionV1 } from '@metaplex-foundation/mpl-core'
+import { Skeleton, Text } from '@mantine/core'
+import { useGetAsset } from '@/features/collection/data-access'
+import { CollectionUiCard } from '@/features/collection/ui/collection-ui-card'
 
 export function CollectionUiGridItem({ collection }: { collection: CollectionV1 }) {
-  const jsonInfo = useGetAsset(collection);
-  const asset = jsonInfo.data;
+  const jsonInfo = useGetAsset(collection)
+  const asset = jsonInfo.data
 
   return (
     <Skeleton visible={jsonInfo.isLoading} radius="lg">
@@ -15,5 +15,5 @@ export function CollectionUiGridItem({ collection }: { collection: CollectionV1 
         <Text>Error loading collection info</Text>
       )}
     </Skeleton>
-  );
+  )
 }

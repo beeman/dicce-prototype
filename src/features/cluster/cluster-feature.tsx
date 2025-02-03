@@ -1,5 +1,5 @@
-import { Container, Stack, Text, Title } from '@mantine/core';
-import { ClusterUiModal, ClusterUiTable } from './ui';
+import { Container, Stack, Text, Title } from '@mantine/core'
+import { ClusterUiModal, ClusterUiTable } from './ui'
 
 export default function ClusterFeature() {
   return (
@@ -12,5 +12,5 @@ export default function ClusterFeature() {
 
       <ClusterUiTable />
     </Container>
-  );
+  )
 }

@@ -1,8 +1,10 @@
-/** @type {import("@ianvs/prettier-plugin-sort-imports").PrettierConfig} */
+/** @type {import('@ianvs/prettier-plugin-sort-imports').PrettierConfig} */
 const config = {
-  printWidth: 100,
+  printWidth: 120,
   singleQuote: true,
-  trailingComma: 'es5',
+  trailingComma: 'all',
+  semi: false,
+  arrowParens: 'always',
   plugins: ['@ianvs/prettier-plugin-sort-imports'],
   importOrder: [
     '.*styles.css$',

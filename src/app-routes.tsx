@@ -1,19 +1,17 @@
-import { lazy } from 'react';
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
-import { Group } from '@mantine/core';
-import { AppLayout } from '@/app-layout';
-import { ClusterUiSelect } from '@/features/cluster/ui/cluster-ui-select';
-import { WalletButton } from '@/features/solana/solana-provider';
-import { UiThemeToggler } from '@/ui/ui-theme-toggler';
-import { HomeFeature } from './features/home/home.feature';
+import { lazy } from 'react'
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom'
+import { Group } from '@mantine/core'
+import { AppLayout } from '@/app-layout'
+import { ClusterUiSelect } from '@/features/cluster/ui/cluster-ui-select'
+import { WalletButton } from '@/features/solana/solana-provider'
+import { UiThemeToggler } from '@/ui/ui-theme-toggler'
+import { HomeFeature } from './features/home/home.feature'
 
-const AccountList = lazy(() => import('@/features/account/account-feature-list'));
-const AccountDetail = lazy(() => import('@/features/account/account-feature-detail'));
-const ClusterFeature = lazy(() => import('@/features/cluster/cluster-feature'));
-const CollectionDetailFeature = lazy(
-  () => import('@/features/collection/collection-detail-feature')
-);
-const CollectionGridFeature = lazy(() => import('@/features/collection/collection-grid-feature'));
+const AccountList = lazy(() => import('@/features/account/account-feature-list'))
+const AccountDetail = lazy(() => import('@/features/account/account-feature-detail'))
+const ClusterFeature = lazy(() => import('@/features/cluster/cluster-feature'))
+const CollectionDetailFeature = lazy(() => import('@/features/collection/collection-detail-feature'))
+const CollectionGridFeature = lazy(() => import('@/features/collection/collection-grid-feature'))
 
 const router = createBrowserRouter([
   {
@@ -45,8 +43,8 @@ const router = createBrowserRouter([
       { path: '/collections/:collection', element: <CollectionDetailFeature /> },
     ],
   },
-]);
+])
 
 export function AppRoutes() {
-  return <RouterProvider router={router} />;
+  return <RouterProvider router={router} />
 }

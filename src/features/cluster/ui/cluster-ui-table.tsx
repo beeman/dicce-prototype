@@ -1,9 +1,9 @@
-import { LucideTrash } from 'lucide-react';
-import { Anchor, Button, Table, Text } from '@mantine/core';
-import { useCluster } from '@/features/cluster/data-access/cluster-provider';
+import { LucideTrash } from 'lucide-react'
+import { Anchor, Button, Table, Text } from '@mantine/core'
+import { useCluster } from '@/features/cluster/data-access/cluster-provider'
 
 export function ClusterUiTable() {
-  const { clusters, setCluster, deleteCluster } = useCluster();
+  const { clusters, setCluster, deleteCluster } = useCluster()
   return (
     <div>
       <Table>
@@ -21,11 +21,7 @@ export function ClusterUiTable() {
                   {item?.active ? (
                     item.name
                   ) : (
-                    <Anchor
-                      component="button"
-                      title="Select cluster"
-                      onClick={() => setCluster(item)}
-                    >
+                    <Anchor component="button" title="Select cluster" onClick={() => setCluster(item)}>
                       {item.name}
                     </Anchor>
                   )}
@@ -39,9 +35,9 @@ export function ClusterUiTable() {
                   onClick={() => {
                     // eslint-disable-next-line no-alert
                     if (!window.confirm('Are you sure?')) {
-                      return;
+                      return
                     }
-                    deleteCluster(item);
+                    deleteCluster(item)
                   }}
                 >
                   <LucideTrash size={16} />
@@ -52,9 +48,9 @@ export function ClusterUiTable() {
         </Table.Tbody>
       </Table>
     </div>
-  );
+  )
 }
 
 function obfuscateSecret(url: string) {
-  return url.replace(url.split('=')[1], '[REDACTED]');
+  return url.replace(url.split('=')[1], '[REDACTED]')
 }

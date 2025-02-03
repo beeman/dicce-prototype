@@ -1,5 +1,5 @@
-import { Text, Title } from '@mantine/core';
-import classes from './home-ui-welcome.module.css';
+import { Text, Title } from '@mantine/core'
+import classes from './home-ui-welcome.module.css'
 
 export function HomeUiWelcome() {
   return (
@@ -7,12 +7,12 @@ export function HomeUiWelcome() {
       <Title className={classes.title} ta="center" mt={100}>
         Welcome to{' '}
         <Text inherit variant="gradient" component="span" gradient={{ from: 'pink', to: 'yellow' }}>
-          Dicceprototype
+          DICCE
         </Text>
       </Title>
       <Text c="dimmed" ta="center" size="lg" maw={580} mx="auto" mt="xl">
-        Dicceprototype is a starter project for Metaplex Core NFT Collections.
+        DICCE is a starter project for Metaplex Core NFT Collections.
       </Text>
     </>
-  );
+  )
 }

@@ -1,8 +1,8 @@
-import { useMemo, useState } from 'react';
-import { useWallet } from '@solana/wallet-adapter-react';
-import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js';
-import { useQueryClient } from '@tanstack/react-query';
-import { LucideRefreshCw } from 'lucide-react';
+import { useMemo, useState } from 'react'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { LAMPORTS_PER_SOL, PublicKey } from '@solana/web3.js'
+import { useQueryClient } from '@tanstack/react-query'
+import { LucideRefreshCw } from 'lucide-react'
 import {
   ActionIcon,
   Alert,
@@ -19,10 +19,10 @@ import {
   TextProps,
   Title,
   TitleProps,
-} from '@mantine/core';
-import { useDisclosure } from '@mantine/hooks';
-import { useCluster } from '@/features/cluster/data-access/cluster-provider';
-import { ExplorerLink } from '@/features/cluster/ui';
+} from '@mantine/core'
+import { useDisclosure } from '@mantine/hooks'
+import { useCluster } from '@/features/cluster/data-access/cluster-provider'
+import { ExplorerLink } from '@/features/cluster/ui'
 import {
   useGetBalance,
   useGetSignatures,
@@ -30,40 +30,40 @@ import {
   useGetTokenBalance,
   useRequestAirdrop,
   useTransferSol,
-} from '../data-access/account-data-access';
+} from '../data-access/account-data-access'
 
 export function ellipsify(str = '', len = 4) {
   if (str.length > 30) {
-    return `${str.substring(0, len)}..${str.substring(str.length - len, str.length)}`;
+    return `${str.substring(0, len)}..${str.substring(str.length - len, str.length)}`
   }
-  return str;
+  return str
 }
 
 export function AccountBalance({ address, ...props }: { address: PublicKey } & TitleProps) {
-  const query = useGetBalance({ address });
+  const query = useGetBalance({ address })
 
   return (
     <Title onClick={() => query.refetch()} {...props}>
       {query.data ? <BalanceSol balance={query.data} /> : '...'} SOL
     </Title>
-  );
+  )
 }
 
 export function AccountChecker() {
-  const { publicKey } = useWallet();
+  const { publicKey } = useWallet()
   if (!publicKey) {
-    return null;
+    return null
   }
-  return <AccountBalanceCheck address={publicKey} />;
+  return <AccountBalanceCheck address={publicKey} />
 }
 
 export function AccountBalanceCheck({ address }: { address: PublicKey }) {
-  const { cluster } = useCluster();
-  const query = useGetBalance({ address });
-  const requestAirdrop = useRequestAirdrop({ address });
+  const { cluster } = useCluster()
+  const query = useGetBalance({ address })
+  const requestAirdrop = useRequestAirdrop({ address })
 
   if (query.isLoading) {
-    return null;
+    return null
   }
   if (query.isError || !query.data) {
     return (
@@ -77,8 +77,7 @@ export function AccountBalanceCheck({ address }: { address: PublicKey }) {
       >
         <Group justify="center">
           <Text>
-            You are connected to <strong>{cluster.name}</strong> but your account is not found on
-            this cluster.
+            You are connected to <strong>{cluster.name}</strong> but your account is not found on this cluster.
           </Text>
           <Button
             variant="light"
@@ -90,14 +89,14 @@ export function AccountBalanceCheck({ address }: { address: PublicKey }) {
           </Button>
         </Group>
       </Alert>
-    );
+    )
   }
-  return null;
+  return null
 }
 
 export function AccountButtons({ address }: { address: PublicKey }) {
-  const wallet = useWallet();
-  const { cluster } = useCluster();
+  const wallet = useWallet()
+  const { cluster } = useCluster()
 
   return (
     <Group gap={2}>
@@ -105,19 +104,19 @@ export function AccountButtons({ address }: { address: PublicKey }) {
       <ModalSend disabled={wallet.publicKey?.toString() !== address.toString()} address={address} />
       <ModalReceive address={address} />
     </Group>
-  );
+  )
 }
 
 export function AccountTokens({ address }: { address: PublicKey }) {
-  const [showAll, setShowAll] = useState(false);
-  const query = useGetTokenAccounts({ address });
-  const client = useQueryClient();
+  const [showAll, setShowAll] = useState(false)
+  const query = useGetTokenAccounts({ address })
+  const client = useQueryClient()
   const items = useMemo(() => {
     if (showAll) {
-      return query.data;
+      return query.data
     }
-    return query.data?.slice(0, 5);
-  }, [query.data, showAll]);
+    return query.data?.slice(0, 5)
+  }, [query.data, showAll])
 
   return (
     <div>
@@ -131,10 +130,10 @@ export function AccountTokens({ address }: { address: PublicKey }) {
               <ActionIcon
                 variant="outline"
                 onClick={async () => {
-                  await query.refetch();
+                  await query.refetch()
                   await client.invalidateQueries({
                     queryKey: ['getTokenAccountBalance'],
-                  });
+                  })
                 }}
               >
                 <LucideRefreshCw size={16} />
@@ -189,9 +188,7 @@ export function AccountTokens({ address }: { address: PublicKey }) {
                   {(query.data?.length ?? 0) > 5 && (
                     <Table.Tr>
                       <Table.Td colSpan={4} align="center">
-                        <Button onClick={() => setShowAll(!showAll)}>
-                          {showAll ? 'Show Less' : 'Show All'}
-                        </Button>
+                        <Button onClick={() => setShowAll(!showAll)}>{showAll ? 'Show Less' : 'Show All'}</Button>
                       </Table.Td>
                     </Table.Tr>
                   )}
@@ -202,30 +199,30 @@ export function AccountTokens({ address }: { address: PublicKey }) {
         )}
       </Stack>
     </div>
-  );
+  )
 }
 
 export function AccountTokenBalance({ address, ...props }: { address: PublicKey } & TextProps) {
-  const query = useGetTokenBalance({ address });
+  const query = useGetTokenBalance({ address })
   return query.isLoading ? (
     <Loader />
   ) : query.data ? (
     <Text {...props}>{query.data?.value.uiAmount}</Text>
   ) : (
     <div>Error</div>
-  );
+  )
 }
 
 export function AccountTransactions({ address }: { address: PublicKey }) {
-  const query = useGetSignatures({ address });
-  const [showAll, setShowAll] = useState(false);
+  const query = useGetSignatures({ address })
+  const [showAll, setShowAll] = useState(false)
 
   const items = useMemo(() => {
     if (showAll) {
-      return query.data;
+      return query.data
     }
-    return query.data?.slice(0, 5);
-  }, [query.data, showAll]);
+    return query.data?.slice(0, 5)
+  }, [query.data, showAll])
 
   return (
     <Stack>
@@ -262,18 +259,10 @@ export function AccountTransactions({ address }: { address: PublicKey }) {
             {items?.map((item) => (
               <Table.Tr key={item.signature}>
                 <Table.Th>
-                  <ExplorerLink
-                    ff="monospace"
-                    path={`tx/${item.signature}`}
-                    label={ellipsify(item.signature, 8)}
-                  />
+                  <ExplorerLink ff="monospace" path={`tx/${item.signature}`} label={ellipsify(item.signature, 8)} />
                 </Table.Th>
                 <Table.Td>
-                  <ExplorerLink
-                    ff="monospace"
-                    path={`block/${item.slot}`}
-                    label={item.slot.toString()}
-                  />
+                  <ExplorerLink ff="monospace" path={`block/${item.slot}`} label={item.slot.toString()} />
                 </Table.Td>
                 <Table.Td>{/*<UiTime date={new Date((item.blockTime ?? 0) * 1000)} />*/}</Table.Td>
                 <Table.Td align="right">
@@ -290,9 +279,7 @@ export function AccountTransactions({ address }: { address: PublicKey }) {
             {(query.data?.length ?? 0) > 5 && (
               <Table.Tr>
                 <Table.Td colSpan={4} align="center">
-                  <Button onClick={() => setShowAll(!showAll)}>
-                    {showAll ? 'Show Less' : 'Show All'}
-                  </Button>
+                  <Button onClick={() => setShowAll(!showAll)}>{showAll ? 'Show Less' : 'Show All'}</Button>
                 </Table.Td>
               </Table.Tr>
             )}
@@ -300,15 +287,15 @@ export function AccountTransactions({ address }: { address: PublicKey }) {
         </Table>
       )}
     </Stack>
-  );
+  )
 }
 
 function BalanceSol({ balance }: { balance: number }) {
-  return <span>{Math.round((balance / LAMPORTS_PER_SOL) * 100000) / 100000}</span>;
+  return <span>{Math.round((balance / LAMPORTS_PER_SOL) * 100000) / 100000}</span>
 }
 
 function ModalReceive({ address, ...props }: { address: PublicKey }) {
-  const [opened, { close, open }] = useDisclosure(false);
+  const [opened, { close, open }] = useDisclosure(false)
 
   return (
     <>
@@ -320,13 +307,13 @@ function ModalReceive({ address, ...props }: { address: PublicKey }) {
         <code>{address.toString()}</code>
       </Modal>
     </>
-  );
+  )
 }
 
 function ModalAirdrop({ address, ...props }: ButtonProps & { address: PublicKey }) {
-  const [opened, { close, open }] = useDisclosure(false);
-  const mutation = useRequestAirdrop({ address });
-  const [amount, setAmount] = useState('2');
+  const [opened, { close, open }] = useDisclosure(false)
+  const mutation = useRequestAirdrop({ address })
+  const [amount, setAmount] = useState('2')
 
   return (
     <>
@@ -346,25 +333,25 @@ function ModalAirdrop({ address, ...props }: ButtonProps & { address: PublicKey 
         <Button
           disabled={!amount || mutation.isPending}
           onClick={() => {
-            mutation.mutateAsync(amount).then(() => close());
+            mutation.mutateAsync(amount).then(() => close())
           }}
         >
           Request Airdrop
         </Button>
       </Modal>
     </>
-  );
+  )
 }
 
 function ModalSend({ address, ...props }: ButtonProps & { address: PublicKey }) {
-  const [opened, { close, open }] = useDisclosure(false);
-  const wallet = useWallet();
-  const mutation = useTransferSol({ address });
-  const [destination, setDestination] = useState('');
-  const [amount, setAmount] = useState('1');
+  const [opened, { close, open }] = useDisclosure(false)
+  const wallet = useWallet()
+  const mutation = useTransferSol({ address })
+  const [destination, setDestination] = useState('')
+  const [amount, setAmount] = useState('1')
 
   if (!address || !wallet.sendTransaction) {
-    return <div>Wallet not connected</div>;
+    return <div>Wallet not connected</div>
   }
 
   return (
@@ -397,12 +384,12 @@ function ModalSend({ address, ...props }: ButtonProps & { address: PublicKey }) 
                 destination: new PublicKey(destination),
                 amount,
               })
-              .then(() => close());
+              .then(() => close())
           }}
         >
           Send
         </Button>
       </Modal>
     </>
-  );
+  )
 }

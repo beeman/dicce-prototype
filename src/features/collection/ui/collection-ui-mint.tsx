@@ -5,9 +5,9 @@ import {
   GuardGroup,
   GuardSet,
   SolPayment,
-} from '@metaplex-foundation/mpl-core-candy-machine';
-import { StartDate } from '@metaplex-foundation/mpl-core-candy-machine/dist/src/generated';
-import { Button, Card, Paper, Stack, Text } from '@mantine/core';
+} from '@metaplex-foundation/mpl-core-candy-machine'
+import { StartDate } from '@metaplex-foundation/mpl-core-candy-machine/dist/src/generated'
+import { Button, Card, Paper, Stack, Text } from '@mantine/core'
 
 export function CollectionUiMint({
   candyMachine,
@@ -15,15 +15,15 @@ export function CollectionUiMint({
   loading,
   mint,
 }: {
-  candyMachine: CandyMachine;
-  candyGuard: CandyGuard;
-  loading: boolean;
-  mint: (guard: DefaultGuardSet) => Promise<boolean>;
+  candyMachine: CandyMachine
+  candyGuard: CandyGuard
+  loading: boolean
+  mint: (guard: DefaultGuardSet) => Promise<boolean>
 }) {
-  const itemsLoaded = candyMachine.itemsLoaded || 0;
-  const itemsRedeemed = candyMachine.itemsRedeemed || 0;
-  const itemsRemaining = itemsLoaded - Number(itemsRedeemed);
-  const groups = candyGuard.groups ?? [];
+  const itemsLoaded = candyMachine.itemsLoaded || 0
+  const itemsRedeemed = candyMachine.itemsRedeemed || 0
+  const itemsRemaining = itemsLoaded - Number(itemsRedeemed)
+  const groups = candyGuard.groups ?? []
   return (
     <Card
       withBorder
@@ -46,9 +46,7 @@ export function CollectionUiMint({
       <Card.Section m="md" mb="xs">
         <Stack>
           {groups.length ? (
-            groups.map((group) => (
-              <CollectionUiGroup key={group.label} group={group} loading={loading} mint={mint} />
-            ))
+            groups.map((group) => <CollectionUiGroup key={group.label} group={group} loading={loading} mint={mint} />)
           ) : (
             <CollectionUiGuard loading={loading} mint={mint} guard={candyGuard.guards} />
           )}
@@ -68,7 +66,7 @@ export function CollectionUiMint({
       </Card.Section>
       <pre>{JSON.stringify({ candyGuard, candyMachine }, null, 2)}</pre>
     </Card>
-  );
+  )
 }
 
 function CollectionUiGuard({
@@ -76,12 +74,12 @@ function CollectionUiGuard({
   mint,
   guard,
 }: {
-  loading: boolean;
-  mint: (guard: DefaultGuardSet) => Promise<boolean>;
-  guard: DefaultGuardSet;
+  loading: boolean
+  mint: (guard: DefaultGuardSet) => Promise<boolean>
+  guard: DefaultGuardSet
 }) {
-  const { canMint, startDate } = getStartDate(guard);
-  const solPaymentGuard = hasSolPaymentGuard(guard);
+  const { canMint, startDate } = getStartDate(guard)
+  const solPaymentGuard = hasSolPaymentGuard(guard)
 
   return (
     <Paper p="md" radius="md">
@@ -106,7 +104,7 @@ function CollectionUiGuard({
       </Button>
       <pre>{JSON.stringify(filterGuards(guard), null, 2)}</pre>
     </Paper>
-  );
+  )
 }
 
 function CollectionUiGroup({
@@ -114,12 +112,12 @@ function CollectionUiGroup({
   mint,
   group,
 }: {
-  loading: boolean;
-  mint: (guard: DefaultGuardSet) => Promise<boolean>;
-  group: GuardGroup<DefaultGuardSet>;
+  loading: boolean
+  mint: (guard: DefaultGuardSet) => Promise<boolean>
+  group: GuardGroup<DefaultGuardSet>
 }) {
-  const { canMint, startDate } = getStartDate(group.guards);
-  const solPaymentGuard = hasSolPaymentGuard(group.guards);
+  const { canMint, startDate } = getStartDate(group.guards)
+  const solPaymentGuard = hasSolPaymentGuard(group.guards)
 
   return (
     <Paper p="md" radius="md">
@@ -154,37 +152,37 @@ function CollectionUiGroup({
     //
     //   <pre>{JSON.stringify(group, null, 2)}</pre>
     // </Paper>
-  );
+  )
 }
 
 function hasStartDateGuard(guards: DefaultGuardSet): StartDate | null {
-  return guards.startDate?.__option === 'Some' ? guards.startDate.value : null;
+  return guards.startDate?.__option === 'Some' ? guards.startDate.value : null
 }
 
 function hasSolPaymentGuard(guards: DefaultGuardSet): SolPayment | null {
-  return guards.solPayment?.__option === 'Some' ? guards.solPayment.value : null;
+  return guards.solPayment?.__option === 'Some' ? guards.solPayment.value : null
 }
 
 function filterGuards(guards: DefaultGuardSet): GuardSet {
-  const result: GuardSet = {};
+  const result: GuardSet = {}
   // Filter out guards with __option None
   Object.keys(guards).forEach((key) => {
     if (guards[key].__option === 'None') {
-      return;
+      return
     }
-    result[key] = guards[key];
-  });
-  return result;
+    result[key] = guards[key]
+  })
+  return result
 }
 
 function getStartDate(guards: DefaultGuardSet) {
-  const startDateGuard = hasStartDateGuard(guards);
-  const startDateSeconds = startDateGuard?.date ? Number(startDateGuard.date) * 1000 : null;
-  const startDate = startDateSeconds ? new Date(startDateSeconds).getTime() : null;
-  const canMint = startDate ? Date.now() >= startDate : true;
+  const startDateGuard = hasStartDateGuard(guards)
+  const startDateSeconds = startDateGuard?.date ? Number(startDateGuard.date) * 1000 : null
+  const startDate = startDateSeconds ? new Date(startDateSeconds).getTime() : null
+  const canMint = startDate ? Date.now() >= startDate : true
 
   return {
     canMint,
     startDate,
-  };
+  }
 }

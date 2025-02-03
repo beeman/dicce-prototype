@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
-import { Anchor, AspectRatio, Card, Group, Image, Text, UnstyledButton } from '@mantine/core';
-import { AssetInfo } from '../data-access';
+import { Link } from 'react-router-dom'
+import { Anchor, AspectRatio, Card, Group, Image, Text, UnstyledButton } from '@mantine/core'
+import { AssetInfo } from '../data-access'
 
 export function CollectionUiCard({ asset, to }: { asset: AssetInfo; to?: string | unknown }) {
   const image = asset?.image ? (
@@ -9,7 +9,7 @@ export function CollectionUiCard({ asset, to }: { asset: AssetInfo; to?: string 
     </AspectRatio>
   ) : (
     <Text> No image </Text>
-  );
+  )
 
   return (
     <Card withBorder radius="lg" shadow="lg">
@@ -41,5 +41,5 @@ export function CollectionUiCard({ asset, to }: { asset: AssetInfo; to?: string 
         ) : null}
       </Card.Section>
     </Card>
-  );
+  )
 }
