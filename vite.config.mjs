@@ -14,13 +14,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       external: [
-        '@mantine/core',
-        '@metaplex-foundation/mpl-token-metadata',
-        '@metaplex-foundation/mpl-core',
-        '@metaplex-foundation/mpl-core-candy-machine',
-        '@metaplex-foundation/mpl-toolbox',
         '@metaplex-foundation/umi-eddsa-web3js',
-        '@solana/web3.js',
       ],
     },
   },
