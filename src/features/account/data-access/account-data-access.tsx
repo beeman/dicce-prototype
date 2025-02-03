@@ -1,4 +1,3 @@
-import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import {
   Connection,
@@ -12,6 +11,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Anchor } from '@mantine/core'
 import { NotificationData } from '@mantine/notifications'
+import { getAllTokenAccounts } from '@/features/account/data-access/get-all-token-accounts'
 import { useCluster } from '@/features/cluster/data-access/cluster-provider'
 import { toastError, toastSuccess } from '@/ui/ui-toast'
 
@@ -106,14 +106,6 @@ export function useTransferSol({ address }: { address: PublicKey }) {
       toastError(`Sending transaction failed! ${error}`)
     },
   })
-}
-
-async function getAllTokenAccounts(connection: Connection, address: PublicKey) {
-  const [tokenAccounts, token2022Accounts] = await Promise.all([
-    connection.getParsedTokenAccountsByOwner(address, { programId: TOKEN_PROGRAM_ID }),
-    connection.getParsedTokenAccountsByOwner(address, { programId: TOKEN_2022_PROGRAM_ID }),
-  ])
-  return [...tokenAccounts.value, ...token2022Accounts.value]
 }
 
 async function requestAndConfirmAirdrop({
